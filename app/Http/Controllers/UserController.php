@@ -28,7 +28,7 @@ class UserController extends Controller
             return redirect()->back();
         }
         catch(Exception $e){
-            toastr()->error('Submitted, you will be contact shortly..');
+            toastr()->error('Duplicate Request' , 'User Already Exists......');
             return redirect()->back();
         }
     }
@@ -42,8 +42,7 @@ class UserController extends Controller
 
         $credentials = $request->only('email','password');
         if(Auth::attempt($credentials)){
-            toastr()->success('LogIn SuccessFully...','Success');
-            return redirect()->route('clubs.index');
+            return redirect()->route('clubs.index')->with('success','Log In SuccessFully....');
         }
         else{
             return redirect()->back()-> with('error','Invalid Login Credentials..');
@@ -60,8 +59,7 @@ class UserController extends Controller
 
     public function userLogOut(){
         Auth::logout();
-        toastr()->success('LogOut SuccessFully...','Logout');
-        return redirect()->route('home')->with('logout','Logout SuccessFully..');
+        return redirect()->route('home')->with('success','Logout SuccessFully..');
     }
 
 }

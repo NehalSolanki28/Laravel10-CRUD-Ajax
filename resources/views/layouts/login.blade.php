@@ -42,7 +42,7 @@
                                 </button>
 
                                 <p class="text-end text-muted mt-3 mb-0">
-                                    <a href="#!" class="fw-bold text-body"><u>Forgot Password ?</u>
+                                    <a href="" class="fw-bold text-body"><u>Forgot Password ?</u>
                                     </a>
                                 </p>
 

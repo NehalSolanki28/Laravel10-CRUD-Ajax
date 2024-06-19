@@ -1,4 +1,6 @@
-$(function() {
+var table;
+$(function () {
+    
     responseData();
 
     $.ajaxSetup({
@@ -9,19 +11,68 @@ $(function() {
     function responseData() {
         $('.active').removeClass('active')
         $('#clubBtn').addClass('active')
+        table = $('.table').DataTable({
+            processing: true,
+            "language": {
+                'loadingRecords': '&nbsp;',
+                processing: '<center><div div class= "loader mt-2"></div ></center>'
+            },
+            paging: true,
+            serverSide: true,
+            ajax: "/clubs",
+            "bDestroy": true,
+            "pageLength": 2,
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
 
-        $('#parent').html('<center><div div class= "loader"></div ></center> ');
+                {data: 'club_name', name: 'club_name'},
+                // {
+                //     data: 'club_logo', name: 'club_logo',
+                //     render: function (data, type, full, meta) {
+                //         return "<img src=\"/images/club_logo/" + data + "\" height=\"80\"/>";
+                //     },
+                //     orderable: false,
+                //     searchable: false
+                // },
+                { data: 'club_slug', name: 'club_slug' },
+                { data: 'business_name', name: 'business_name' },
+                { data: 'website_title', name: 'website_title' },
+                {data: 'action', name: 'action', orderable: false, searchable: false},
+            ]
+        });
+
+        // $('tbody').html('<center><div div class= "loader mt-2"></div ></center> ');
         
-        setTimeout(function () {
-            $.ajax({
-                url: '/clubs',
-                type: 'GET',
-                cache:false,
-                success: function (response) {
-                    $('#parent').html(response);
-                }
-            });
-        }, 1000)
+        // setTimeout(function () {
+        //     table = $('.table').DataTable({
+        //         processing: true,
+        //         "language": {
+        //             processing: '<center><div div class= "loader mt-2"></div ></center>'
+        //         },
+        //         paging: true,
+        //         serverSide: true,
+        //         ajax: "/clubs",
+        //         "bDestroy": true,
+        //         "pageLength": 2,
+        //         columns: [
+        //             { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+    
+        //             {data: 'club_name', name: 'club_name'},
+        //             {
+        //                 data: 'club_logo', name: 'club_logo',
+        //                 render: function (data, type, full, meta) {
+        //                     return "<img src=\"/images/club_logo/" + data + "\" height=\"80\"/>";
+        //                 },
+        //                 orderable: false,
+        //                 searchable: false
+        //             },
+        //             { data: 'club_slug', name: 'club_slug' },
+        //             { data: 'business_name', name: 'business_name' },
+        //             { data: 'website_title', name: 'website_title' },
+        //             {data: 'action', name: 'action', orderable: false, searchable: false},
+        //         ]
+        //     });
+        // }, 1000)
     };
 
     $('#clubBtn').on('click',function() {
@@ -40,6 +91,9 @@ $(function() {
             url: "/clubs/" + itemId + '/edit',
             type: 'GET',
             success: function (response) {
+                let url = "/images/club_logo/" + response.club.club_logo;
+                // console.log(url);
+                
                 $('#itemId').val(response.club.id);
                 $('#group_id').val(response.club.group_id);
                 $('#business_name').val(response.club.business_name);
@@ -50,6 +104,16 @@ $(function() {
                 $('#club_slug').val(response.club.club_slug);
                 $('#website_title').val(response.club.website_title);
                 $('#website_link').val(response.club.website_link);
+                // $('#clubLogoName').html(response.club.club_logo);
+
+                // $('#club_logo').on('change', function (event) {
+                //     $('#clubLogoName').html(event.target.files[0].name);
+                // });
+                // $('#logo').html(
+                //     `<img src="/images/club_logo/${response.club.club_logo}" width="100"
+                //     class="clubLogo img-fluid img-thumbnail mx-3"></img>`
+                // )
+
 
                 $('#exampleModalLabel').text('Edit Club');
                 $('#submit').text('Update');
@@ -62,6 +126,7 @@ $(function() {
     // Save Data & Update Data
 
     $('#clubForm').on('submit', function (e) {
+        // console.log(table);
         e.preventDefault();
         let itemId = $('#itemId').val();
         let url = itemId ? '/clubs/' + itemId : '/clubs';
@@ -100,6 +165,7 @@ $(function() {
     $(document).on('click', '.delete-btn', function (e) {
         console.log(e);
         let itemId = $(this).data('id');
+
         function deleteConfirmation(id) {
             Swal.fire({
                 title: "Delete?",

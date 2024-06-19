@@ -10,8 +10,8 @@
             <th scope="col" class="text-center">Action</th>
         </tr>
     </thead>
-    <tbody class="table-group-divider" id="tableData">
-        @if(sizeof($club))
+    <tbody class="table-group-divider" id="tableData1">
+        {{-- @if(sizeof($club))
             @foreach ($club as $ele)
                 <tr>
                     <th scope="row">{{ $loop->index + 1 }}</th>
@@ -39,7 +39,7 @@
                 <tr>
                     <th colspan="100%" class="text-center">No Data Found</th>
                 </tr>
-        @endif
+        @endif --}}
 
     </tbody>
 </table>

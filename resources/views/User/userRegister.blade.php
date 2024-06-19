@@ -22,32 +22,39 @@
                                     <div class="card-body p-5">
                                         <h2 class="text-uppercase text-center mb-5">Create an account</h2>
         
-                                        <form>
-        
+                                        <form action="{{route('userData')}}" method="POST" id="userForm">
+                                            @csrf
                                             <div data-mdb-input-init class="form-outline mb-4">
-                                                <input type="text" id="form3Example1cg"
-                                                    class="form-control form-control-lg" />
-                                                <label class="form-label" for="form3Example1cg">Your Name</label>
+                                                <input type="text" id="userName"
+                                                    class="form-control form-control-lg" name="userName"/>
+                                                <label class="form-label" for="userName">Your Name</label>
                                             </div>
         
                                             <div data-mdb-input-init class="form-outline mb-4">
-                                                <input type="email" id="form3Example3cg"
-                                                    class="form-control form-control-lg" />
-                                                <label class="form-label" for="form3Example3cg">Your Email</label>
+                                                <input type="email" id="email"
+                                                    class="form-control form-control-lg" name="email"/>
+                                                <label class="form-label" for="email">Your Email</label>
                                             </div>
         
                                             <div data-mdb-input-init class="form-outline mb-4">
-                                                <input type="password" id="form3Example4cg"
-                                                    class="form-control form-control-lg" />
-                                                <label class="form-label" for="form3Example4cg">Password</label>
+                                                <input type="password" id="password"
+                                                    class="form-control form-control-lg" name="password"/>
+                                                <label class="form-label" for="password">Password</label>
                                             </div>
         
                                             <div data-mdb-input-init class="form-outline mb-4">
-                                                <input type="password" id="form3Example4cdg"
-                                                    class="form-control form-control-lg" />
-                                                <label class="form-label" for="form3Example4cdg">Repeat your password</label>
+                                                <input type="password" id="confirm_password"
+                                                    class="form-control form-control-lg" name="confirm_password"/>
+                                                <label class="form-label" for="confirm_password">Repeat your password</label>
                                             </div>
-        
+
+                                            <div class="col-lg-4 mb-2">
+                                                <select class="form-select" aria-label="Default select example" name="role"> 
+                                                    <option selected></option>
+                                                    <option value="0">User</option>
+                                                    <option value="1">Admin</option>
+                                                </select>
+                                            </div>
                                             <div class="form-check d-flex justify-content-center mb-5">
                                                 <input class="form-check-input me-2" type="checkbox" value=""
                                                     id="form2Example3cg" />
@@ -58,7 +65,7 @@
                                             </div>
         
                                             <div class="d-flex justify-content-center">
-                                                <button type="button" data-mdb-button-init data-mdb-ripple-init
+                                                <button type="submit" data-mdb-button-init data-mdb-ripple-init
                                                     class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Register</button>
                                             </div>
         
@@ -79,5 +86,14 @@
     </div>
    
 </body>
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+crossorigin="anonymous"></script>
+
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+
+<script src="/js/userValidation.js"></script>
 
 </html>

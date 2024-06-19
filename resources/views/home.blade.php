@@ -6,7 +6,7 @@
 </head>
 
 <body>
-        
+    @include('layouts.login')            
 </body>
 
 </html>

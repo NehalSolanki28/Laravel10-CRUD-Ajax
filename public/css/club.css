@@ -1,0 +1,10 @@
+.dataTables_length,.DataTables_Table_0_filter{
+    margin-bottom: 20px;
+}
+div.dataTables_wrapper div.dataTables_paginate {
+    margin-top: 15px !important;
+}
+
+body{
+    overflow-x: hidden;
+}

@@ -23,6 +23,7 @@ $(document).ready(function () {
             },
             club_slug: {
                 required: true,
+                alphanumeric: true,
             },
             website_title: {
                 required: true,
@@ -51,7 +52,10 @@ $(document).ready(function () {
             club_name: 'Please Enter Your Club Name',
             club_state: 'Please Enter State',
             club_description: 'Please Enter Description About Your Club',
-            club_slug: 'Please Enter Club Owner Name',
+            club_slug: {
+                required: 'Please Enter Club Slug Name',
+                alphanumeric: 'Please Enter Only Alphabets....'
+            },
             website_title: 'Please Enter Website Name',
             website_link: {
                 required: 'Please provide Your Club Website Link',
