@@ -1,29 +1,39 @@
-$(function () {
-    productData();
 
+$(function () {
+    $(document).on('click', '.pagination a', function (event) {
+        event.preventDefault();
+        $('li').removeClass('active');
+        $(this).parent('li').addClass('active');
+        var myurl = $(this).attr('href');
+        var page = $(this).attr('href').split('page=')[1];
+        productData(page);
+    });
+    productData(1);
 
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    function productData() {
+    function productData(page) {
         $('.active').removeClass('active')
-        $('#productBtn').addClass('active') 
+        $('#productBtn').addClass('active')
+        $('.active').addClass('bg-secondary')
 
-        $('#productPage').html('<center><div div div class= "loader" ></div ></center > ');
+        $('#productPage').html('<center><div div div class= "loader" ></div ></center> ');
 
-            setTimeout(function () {
-                $.ajax({
-                    url: '/products',
-                    type: 'GET',
-                    cache: false,
-                    success: function (response) {
-                        $('#productPage').html(response);
-                    }
-                });
-            }, 1000)
-        }
+        setTimeout(function () {
+            $.ajax({
+                url: '/products?page=' + page,
+                type: 'GET',
+                cache: false,
+                success: function (response) {
+                    $('#productPage').html(response.product);
+                    $('#productPaginate').html(response.link);
+                }
+            });
+        }, 1000)
+    }
 
     $('#productBtn').on('click', function () {
         productData();
@@ -127,6 +137,40 @@ $(function () {
         deleteConfirmation(productId);
         e.preventDefault();
     })
+
+    // Discount Btn
+    $(document).on('click', '.product-discount', function (e) {
+        let productId = $(this).data('id');
+        $.ajax({
+            url: '/products/' + productId,
+            type: 'GET',
+            success: function (response) {
+
+                $('#discountModal').find("tbody").empty();
+                $('#productTitle').html(response.product.product_title);
+                $discountArr = response.discount;
+
+                $discountArr.forEach(element => {
+                    if (element.status == 'active') {
+                        $('#discountBody').append(`
+                        <tr>
+                            <td>${element.code} </td>
+                            <td>${element.percentage} %</td>
+                            <td>${element.expiry_date} </td>
+                        </tr>`)
+                    }
+                });
+                $('#discountModal').modal('show');
+                // "<tr><td>This is row "  + lineNo + "</td></tr>"
+            }
+        })
+    })
+
+
+
+
+
+    // Add Product Btn....
     $(document).on('click', '#addProduct', function () {
         $('#productForm').trigger('reset');
         $('#submit').text('Submit');
@@ -134,16 +178,7 @@ $(function () {
         $("#productId").removeAttr("value");
         $('#productMethod').val('POST');
         $('#productModalLabel').text('Add New Product');
-
     })
 })
 
-// if (error.status == 422) {
-// // when status code is 422, it's a validation issue
-// console.log(error.responseJSON);
-// console.warn(error.responseJSON.errors);
-// $.each(error.responseJSON.errors, function (i, error) {
-// var element = $(document).find('[name="' + i + '"]');
-// element.after($('<span style="color: red;">'+error[0]+'</span>'));
-// });
-// }
+

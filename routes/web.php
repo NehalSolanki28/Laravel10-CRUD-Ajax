@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\ClubController;
+use App\Http\Controllers\CommandController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,14 +18,15 @@ use Illuminate\Support\Facades\Route;
 |
 
 // */
-Route::get('/',function(){
-    return view('home');
+// Home Page Login.....
+Route::get('/',function(Request $request){
+    return view('layouts.login');
 })->name('home');
 
 
-
-Route::resource('clubs',ClubController::class);
-Route::resource('products',ProductController::class);
+// Club And Product Route...
+Route::resource('clubs',ClubController::class)->middleware('auth');
+Route::resource('products',ProductController::class)->middleware('auth');
 
 
 // User Register
@@ -34,6 +37,11 @@ Route::post('userData',[UserController::class,'store'])->name('userData');
 Route::post('userLogin',[UserController::class,'userLogin'])->name('userLogin');
 Route::get('userLogOut',[UserController::class,'userLogOut'])->name('userLogOut');
 
+
 // Forgot Password && Reset Password
 
 
+
+
+// Custom Command
+Route::get('/cmd',[CommandController::class,'index']);

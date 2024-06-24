@@ -11,6 +11,8 @@ $(function () {
     function responseData() {
         $('.active').removeClass('active')
         $('#clubBtn').addClass('active')
+        $('.active').addClass('bg-secondary')
+
         table = $('.table').DataTable({
             processing: true,
             "language": {
@@ -79,20 +81,17 @@ $(function () {
         responseData();
     });
 
-
     // Edit Data
     $(document).on('click', '.edit-btn', function (e) {
 
         $('#clubForm').validate().resetForm();
         e.preventDefault();
         let itemId = $(this).data('id');
-        // console.log(itemId);
         $.ajax({
             url: "/clubs/" + itemId + '/edit',
             type: 'GET',
             success: function (response) {
                 let url = "/images/club_logo/" + response.club.club_logo;
-                // console.log(url);
                 
                 $('#itemId').val(response.club.id);
                 $('#group_id').val(response.club.group_id);
@@ -104,16 +103,33 @@ $(function () {
                 $('#club_slug').val(response.club.club_slug);
                 $('#website_title').val(response.club.website_title);
                 $('#website_link').val(response.club.website_link);
-                // $('#clubLogoName').html(response.club.club_logo);
+                $('#club_logo').hide(); 
+                $('#clubLogoName').show();
 
-                // $('#club_logo').on('change', function (event) {
-                //     $('#clubLogoName').html(event.target.files[0].name);
-                // });
-                // $('#logo').html(
-                //     `<img src="/images/club_logo/${response.club.club_logo}" width="100"
-                //     class="clubLogo img-fluid img-thumbnail mx-3"></img>`
-                // )
+                $('#club_banner').hide(); 
+                $('#clubBannerName').show();
 
+                $('#clubLogoName').html(
+                    `<img src="/images/club_logo/${response.club.club_logo}" width="200px" height="200px"
+                    class="clubLogo img-fluid img-thumbnail mx-3"></img>
+                    <i class="close-btn bi bi-x-circle fw-bold fs-4 text-danger"></i>`
+                )
+                
+                $('#clubBannerName').html(
+                    `<img src="/images/club_banner/${response.club.club_banner}" width="200px" height="200px"
+                    class="clubLogo img-fluid img-thumbnail mx-3"></img>
+                    <i class="close-banner-btn bi bi-x-circle fw-bold fs-4 text-danger"></i>`
+                )
+
+                $('.close-btn').on('click', function () {
+                    $('#clubLogoName').hide();
+                    $('#club_logo').show(); 
+                })
+
+                $('.close-banner-btn').on('click', function () {
+                    $('#clubBannerName').hide();
+                    $('#club_banner').show(); 
+                })
 
                 $('#exampleModalLabel').text('Edit Club');
                 $('#submit').text('Update');
@@ -207,6 +223,10 @@ $(function () {
         $('#clubForm').validate().resetForm();
         $("#itemId").removeAttr("value");
         $('#clubForm').trigger('reset');
+        $('#club_logo').show(); 
+        $('#club_banner').show(); 
+        $('#clubLogoName').hide();
+        $('#clubBannerName').hide();
     })
 })
 

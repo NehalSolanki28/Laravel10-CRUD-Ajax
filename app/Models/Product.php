@@ -20,5 +20,9 @@ class Product extends Model
     public function clubs(){
         return $this->belongsTo(Club::class,'club_id','id');
     }
+
+    public function discounts(){
+        return $this->hasMany(Discount::class,'product_id','id');
+    }
     
 }

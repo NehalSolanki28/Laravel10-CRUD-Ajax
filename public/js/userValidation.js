@@ -3,7 +3,7 @@ let form = '#userForm';
 $(document).ready(function () {
     $('#userForm').validate({
         rules: {
-            userName: {
+            name: {
                 required: true,
             },
             email: {
@@ -22,7 +22,7 @@ $(document).ready(function () {
             }
         },
         messages: {
-            userName: 'Please enter Name.',
+            name: 'Please enter Name.',
             email: {
               required: 'Please enter Email Address.',
               email: 'Please enter a valid Email Address.',

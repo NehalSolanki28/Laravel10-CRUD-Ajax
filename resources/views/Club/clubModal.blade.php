@@ -1,21 +1,22 @@
  <!-- Modal Button -->
- 
+
  <div class="container mt-5">
-    <div class="row">
-        <div class="col-lg-4 fs-4 mt-2">
-            {{Auth::user()->userName}}
-        </div>
-        <div class="col-lg-8 d-flex justify-content-end">
-            <button type="button" data-mdb-button-init data-mdb-ripple-init
-                class="btn btn-outline-primary px-4 fw-bold border-2" data-mdb-ripple-color="dark" data-bs-toggle="modal"
-                data-bs-target="#createModal" id="clubModal">
-                Add New Club
-            </button>
-        </div>
-    </div>
+     <div class="row">
+         <div class="col-lg-4 fs-4 mt-2">
+             {{-- {{Auth::user()->userName}} --}}
+         </div>
+         <div class="col-lg-8 d-flex justify-content-end">
+             <button type="button" data-mdb-button-init data-mdb-ripple-init
+                 class="btn btn-outline-dark px-4 fw-bold border-2" data-mdb-ripple-color="dark" data-bs-toggle="modal"
+                 data-bs-target="#createModal" id="clubModal">
+                 Add New Club
+             </button>
+         </div>
+     </div>
  </div>
  {{-- Modal Body --}}
- <div class="modal fade modal-lg" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+ <div class="modal fade modal-lg" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
      <div class="modal-dialog">
          <div class="modal-content">
              <div class="modal-header">
@@ -30,6 +31,7 @@
                      <form id="clubForm" enctype="multipart/form-data" action="javascript:;">
                          {{-- @csrf --}}
                          <input type="hidden" id="itemId">
+                         
                          <input type="hidden" name="_method" id="_method" value="POST">
 
                          <div class="row">
@@ -78,13 +80,12 @@
                              </div>
                          </div>
                          <div class="row">
-                             <div class="col-lg-6 mt-3 ms-3">
-                                 <label for="clubLogo" class="form-label">Club Logo</label>
-                                 <input class="form-control" name="club_logo" type="file" id="club_logo" multiple>
-                                 
-                             </div> 
-                             <div class="col-lg-4" id="clubLogoName" style="color: darkblue; margin-top:50px">
+                             <div class="col-lg-6 mt-3 ms-3" id="clubLogo">
+                                 <label for="clubLogo" class="form-label fw-bold">Club Logo</label>
+                                 <input type="file" class="form-control" name="club_logo" id="club_logo" multiple>
+                                 <div id="clubLogoName">
 
+                                 </div>
                              </div>
                          </div>
                          <div class="col-lg-6 px-2 mt-3">
@@ -92,6 +93,9 @@
                                  <label for="clubBanner" class="form-label">Club Banner</label>
                                  <input class="form-control" name="club_banner" type="file" id="club_banner"
                                      multiple>
+                                 <div id="clubBannerName">
+
+                                 </div>
                              </div>
                          </div>
                          <div class="row px-2 mt-3">

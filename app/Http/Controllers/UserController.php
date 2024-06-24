@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendEmailJob;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -19,11 +20,18 @@ class UserController extends Controller
     public function store(Request $request){
         try{
             $user = User::create([
-                'userName' => $request->userName,
+                'name' => $request->name,
                 'email'=>$request->email,
                 'password'=>Hash::make($request->password),
                 'role'=>$request->role,
             ]);
+
+            if($user){     
+                $userEmail = $request->email;
+                $userName = $request->userName;
+                SendEmailJob::dispatch($userEmail,$userName);
+            }
+
             session()->flash('success','User Created SuccessFully');
             return redirect()->back();
         }
@@ -45,7 +53,7 @@ class UserController extends Controller
             return redirect()->route('clubs.index')->with('success','Log In SuccessFully....');
         }
         else{
-            return redirect()->back()-> with('error','Invalid Login Credentials..');
+            return redirect()->back()-> with('error','Invalid Logpin Credentials..');
         }
     }
     public function userAuthCheck(){

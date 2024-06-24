@@ -25,15 +25,15 @@
                                         <form action="{{route('userData')}}" method="POST" id="userForm">
                                             @csrf
                                             <div data-mdb-input-init class="form-outline mb-4">
-                                                <input type="text" id="userName"
-                                                    class="form-control form-control-lg" name="userName"/>
-                                                <label class="form-label" for="userName">Your Name</label>
+                                                <label class="form-label" for="name">Your Name</label>
+                                                <input type="text" id="name"
+                                                    class="form-control form-control-lg" name="name"/>
                                             </div>
         
                                             <div data-mdb-input-init class="form-outline mb-4">
+                                                <label class="form-label" for="email">Your Email</label>
                                                 <input type="email" id="email"
                                                     class="form-control form-control-lg" name="email"/>
-                                                <label class="form-label" for="email">Your Email</label>
                                             </div>
         
                                             <div data-mdb-input-init class="form-outline mb-4">

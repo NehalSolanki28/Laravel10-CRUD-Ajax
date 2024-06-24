@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Club;
+use App\Models\Discount;
 use App\Models\Product;
 // use Illuminate\Http\Client\ResponseSequence;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Yajra\DataTables\DataTables as DataTables;
-// use Yajra\DataTables\Facades\DataTables;
 
 // use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -20,6 +20,7 @@ class ClubController extends Controller
      */
     public function index(Request $request)
     {
+        // dump($request->all());
         if ($request->ajax()) {
             $club = Club::orderBy('created_at', 'desc')->get();
             return DataTables::of($club)
@@ -60,13 +61,13 @@ class ClubController extends Controller
     {
         // Club Logo
         $clubLogo = $request->file('club_logo');
-        $logoName = $clubLogo->getClientOriginalName();
+        $logoName = time().''.$clubLogo->getClientOriginalName();
         $destinationPath = public_path('images/club_logo');
         $clubLogo->move($destinationPath, $logoName);
 
         // Club Banner
         $clubBanner = $request->file('club_banner');
-        $bannerName = $clubBanner->getClientOriginalName();
+        $bannerName =time().''.$clubBanner->getClientOriginalName();
         $destinationPath = public_path('images/club_banner');
         $clubBanner->move($destinationPath, $bannerName);
 
@@ -124,25 +125,31 @@ class ClubController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-    {
-        // Club Logo
-        $clubLogo = $request->file('club_logo');
-        $logoName = $clubLogo->getClientOriginalName();
-        $destinationPath = public_path('images/club_logo');
-        $clubLogo->move($destinationPath, $logoName);
-
-        // Club Banner
-        $clubBanner = $request->file('club_banner');
-        $bannerName = $clubBanner->getClientOriginalName();
-        $destinationPath = public_path('images/club_banner');
-        $clubBanner->move($destinationPath, $bannerName);
-
+    {   
         $club = Club::find($id);
+
+        if($request->hasFile('club_logo')){
+            // Club Logo
+            $clubLogo = $request->file('club_logo');
+            $logoName = time().''.$clubLogo->getClientOriginalName();
+            $destinationPath = public_path('images/club_logo');
+            $clubLogo->move($destinationPath, $logoName);
+            $club->update([
+                'club_logo' => $logoName,
+            ]);
+        }
+
+        if($request->hasFile('club_banner')){
+             // Club Banner
+            $clubBanner = $request->file('club_banner');
+            $bannerName = time().''.$clubBanner->getClientOriginalName();
+            $destinationPath = public_path('images/club_banner');
+            $clubBanner->move($destinationPath, $bannerName);
+            $club->update([
+                'club_banner' => $bannerName,
+            ]);
+        }
         $club->update($request->input());
-        $club->update([
-            'club_logo' => $logoName,
-            'club_banner' => $bannerName,
-        ]);
 
         return response()->json([
             'success' => true,
@@ -167,7 +174,7 @@ class ClubController extends Controller
         }
 
         $club->delete();
-        Product::where('club_id', $id)->delete();
+        $product = Product::where('club_id', $id)->delete();
         return response(true);
     }
 }

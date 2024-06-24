@@ -8,3 +8,18 @@ div.dataTables_wrapper div.dataTables_paginate {
 body{
     overflow-x: hidden;
 }
+
+.active> .page-link{
+    background-color: #48494a !important;
+    border-color: #48494a !important;
+}
+.page-link{
+    color: black;
+}
+
+.active> .page-link:hover{
+    color: rgba(255, 255, 255, 0.932);
+}
+.page-link:hover{
+    color:black;
+}

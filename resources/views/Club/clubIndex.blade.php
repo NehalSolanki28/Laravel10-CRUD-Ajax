@@ -20,8 +20,8 @@
                 </header>
                 <div class="card bg-white me-5 mt-5 p-5 shadow-lg rounded-4">
                     <section>
-                        <div class="container mt-5" id="parent">
-                            <table class="table table-striped table-bordered text-center ">
+                        <div class="container mt-5 w-100" id="parent">
+                            <table class="table table-striped table-bordered text-center w-100">
                                 <thead>
                                     <tr>
                                         <th scope="col">Sr No.</th>
@@ -34,6 +34,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="table-group-divider" id="tableData">
+
                                 </tbody>
                             </table>
     

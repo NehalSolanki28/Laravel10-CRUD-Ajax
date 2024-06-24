@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProductRequest;
+use App\Jobs\ApplyDiscount;
 use App\Models\Club;
+use App\Models\Discount;
 use App\Models\Product;
+use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\View;
-use PhpParser\Node\Stmt\Return_;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -15,14 +18,14 @@ class ProductController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {   
-        if($request->ajax()){
-            $product = Product::orderBy('created_at', 'desc')->get();
-            $productTable =  View::make('Product.productTable',compact('product'))->render();
-            return response()->json($productTable);
+    {
+        if ($request->ajax()) {
+            $product = Product::orderBy('created_at', 'desc')->paginate(2);
+            $productTable = View::make('Product.productTable', compact('product'))->render();
+            return response()->json(['product'=>$productTable,'link'=>$product->links('pagination::bootstrap-5  ')->render()]);
         }
         $club = Club::all();
-        return view('Product.productIndex',compact('club'));
+        return view('Product.productIndex', compact('club'));
     }
 
     /**
@@ -37,27 +40,42 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {   
-
+    {
         $product = Product::create([
-            'club_id'=>$request->club_id,
-            'title'=>$request->title,
-            'product_title'=>$request->product_title,
-            'type'=>$request->type,
+            'club_id' => $request->club_id,
+            'title' => $request->title,
+            'product_title' => $request->product_title,
+            'type' => $request->type,
         ]);
+
+        if ($product) {
+            $date = new DateTime('now');
+            $discount1 = ['product_id' => $product->id, 'code' => Str::random(6), 'percentage' => 10, 'min_amount' => 100, 'expiry_date' => $date->modify('+3 month')->format('Y-m-d h:i:s')];
+            $discount2 = ['product_id' => $product->id, 'code' => Str::random(6), 'percentage' => 15, 'min_amount' => 200, 'expiry_date' => $date->modify('+2 month')->format('Y-m-d h:i:s')];
+            $discount3 = ['product_id' => $product->id, 'code' => Str::random(6), 'percentage' => 20, 'min_amount' => 500, 'expiry_date' => $date->modify('+1 month')->format('Y-m-d h:i:s') ];
+            
+            ApplyDiscount::dispatch($discount1,$discount2,$discount3);
+        }
+
         return response()->json([
-            'status'=>true,
-            'message'=>'Product Created SuccessFully'
+            'status' => true,
+            'message' => 'Product Created SuccessFully',
         ]);
-        
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
+    public function show($id)
     {
-        //
+        $product = Product::find($id);
+        $discount = $product->discounts;
+        
+        return response()->json([
+            'status'=>true,
+            'product'=>$product,
+            'discount'=>$discount,
+        ]);
     }
 
     /**
@@ -98,7 +116,7 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $product = Product::find($id)->delete();
-        
+        $discount = Discount::where('product_id',$id)->delete();
         return response()->json([
             'status' => true,
             'message' => 'Product Deleted SuccessFully...',
